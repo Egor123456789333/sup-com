@@ -8,6 +8,24 @@ const User = sequelize.define("user", {
   role: { type: DataTypes.STRING, unique: false, defaultValue: "USER" },
 });
 
+const Test = sequelize.define("test", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  chapter: { type: DataTypes.INTEGER, unique: true },
+  chapterName: { type: DataTypes.TEXT, unique: true },
+});
+
+const QuestionTest = sequelize.define("question_test", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  questionText: { type: DataTypes.STRING, unique: false },
+});
+
+const QuestionAnswer = sequelize.define("question_answer", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+
+  text: { type: DataTypes.STRING, unique: false },
+  rigth: { type: DataTypes.BOOLEAN, unique: false },
+});
+
 const Basket = sequelize.define("basket", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
@@ -40,10 +58,19 @@ BasketCourse.belongsTo(Course);
 Author.hasMany(Course, { as: "authorInfo" });
 Course.belongsTo(Author);
 
+Test.hasMany(QuestionTest);
+QuestionTest.belongsTo(Test);
+
+QuestionTest.hasMany(QuestionAnswer);
+QuestionAnswer.belongsTo(QuestionTest);
+
 module.exports = {
   User,
   Basket,
   BasketCourse,
   Course,
   Author,
+  Test,
+  QuestionTest,
+  QuestionAnswer,
 };

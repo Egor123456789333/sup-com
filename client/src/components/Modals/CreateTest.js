@@ -1,0 +1,35 @@
+import React from "react";
+import { Button, Modal, Form } from "react-bootstrap";
+
+const CreateTest = ({ show, onHide }) => {
+  return (
+    <Modal
+      show={show}
+      onHide={onHide}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Добавить тест
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Form.Control placeholder={"Введите название теста"} />
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="outline-danger" onClick={onHide}>
+          Закрыть
+        </Button>
+        <Button variant="outline-success" onClick={onHide}>
+          Добавить
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+export default CreateTest;
