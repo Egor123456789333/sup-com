@@ -5,16 +5,20 @@ import { BrowserRouter } from "react-router-dom";
 import { Context } from ".";
 import AppRouter from "./components/AppRouter";
 import NavBar from "./components/NavBar";
+import { fetchTheory } from "./http/theoryApi";
 import { check } from "./http/userApi";
 
 const App = observer(() => {
-  const { user } = useContext(Context);
+  const { user, theory } = useContext(Context);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    fetchTheory().then((data) => {
+      theory.setChapters(data);
+    });
     check()
       .then((data) => {
-        user.setUser(true);
+        user.setUser(data);
         user.setIsAuth(true);
       })
       .finally(() => setLoading(false));

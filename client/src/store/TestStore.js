@@ -4,7 +4,7 @@ export default class TestStore {
   constructor() {
     this._tests = [];
     this._oneTest = [];
-    this._questionAnswer = [];
+    this._answer = [];
 
     makeAutoObservable(this);
   }
@@ -16,11 +16,19 @@ export default class TestStore {
     this._oneTest = oneTest;
   }
 
+  setAnswer(answer) {
+    this._answer = answer;
+  }
+
   get tests() {
     return this._tests;
   }
 
   get oneTest() {
     return this._oneTest;
+  }
+
+  get answer() {
+    return this._answer;
   }
 }

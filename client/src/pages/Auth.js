@@ -12,7 +12,7 @@ const Auth = observer(() => {
   const location = useLocation();
   const history = useHistory();
   const isLogin = location.pathname === LOGIN_ROUTE;
-  console.log(isLogin);
+  //console.log(isLogin);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,11 +21,13 @@ const Auth = observer(() => {
       let data;
       if (isLogin) {
         data = await login(email, password);
+        console.log(data);
       } else {
         data = await registration(email, password);
       }
-      user.setUser(user);
+      user.setUser(data);
       user.setIsAuth(true);
+
       history.push(MAIN_ROUTE);
     } catch (e) {
       alert(e.response.data.message);

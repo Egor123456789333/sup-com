@@ -17,6 +17,9 @@ const Test = sequelize.define("test", {
 const QuestionTest = sequelize.define("question_test", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   questionText: { type: DataTypes.STRING, unique: false },
+  position: { type: DataTypes.INTEGER },
+  type: { type: DataTypes.STRING, unique: false },
+  typeRu: { type: DataTypes.STRING, unique: false },
 });
 
 const QuestionAnswer = sequelize.define("question_answer", {
@@ -24,6 +27,12 @@ const QuestionAnswer = sequelize.define("question_answer", {
 
   text: { type: DataTypes.STRING, unique: false },
   rigth: { type: DataTypes.BOOLEAN, unique: false },
+});
+
+const OnelineAnswer = sequelize.define("one_line", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  text: { type: DataTypes.STRING, unique: false },
+  answerText: { type: DataTypes.STRING, unique: false },
 });
 
 const Basket = sequelize.define("basket", {
@@ -46,6 +55,33 @@ const Author = sequelize.define("author", {
   name: { type: DataTypes.STRING, unique: true, allowNull: false },
 });
 
+const Theory = sequelize.define("theory", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  chapterNum: { type: DataTypes.INTEGER },
+  name: { type: DataTypes.STRING, unique: true, allowNull: false },
+  text: { type: DataTypes.TEXT, allowNull: false },
+  type: { type: DataTypes.STRING, allowNull: false },
+});
+
+const MPITheory = sequelize.define("mpi", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  name: { type: DataTypes.STRING, unique: true, allowNull: false },
+  text: { type: DataTypes.TEXT, unique: true, allowNull: false },
+});
+
+const OpenMPTheory = sequelize.define("openMp", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  name: { type: DataTypes.STRING, unique: true, allowNull: false },
+  text: { type: DataTypes.TEXT, unique: true, allowNull: false },
+});
+
+const ResultsTest = sequelize.define("result", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  userId: { type: DataTypes.INTEGER },
+  testId: { type: DataTypes.INTEGER },
+  rigthAnswers: { type: DataTypes.REAL },
+});
+
 User.hasOne(Basket);
 Basket.belongsTo(User);
 
@@ -58,11 +94,17 @@ BasketCourse.belongsTo(Course);
 Author.hasMany(Course, { as: "authorInfo" });
 Course.belongsTo(Author);
 
-Test.hasMany(QuestionTest);
-QuestionTest.belongsTo(Test);
+Test.hasMany(QuestionTest, { onDelete: "cascade" });
+QuestionTest.belongsTo(Test, { onDelete: "cascade" });
 
-QuestionTest.hasMany(QuestionAnswer);
-QuestionAnswer.belongsTo(QuestionTest);
+QuestionTest.hasMany(QuestionAnswer, { onDelete: "cascade" });
+QuestionAnswer.belongsTo(QuestionTest, { onDelete: "cascade" });
+
+QuestionTest.hasMany(OnelineAnswer, { onDelete: "cascade" });
+OnelineAnswer.belongsTo(QuestionTest, { onDelete: "cascade" });
+
+User.hasMany(ResultsTest, { onDelete: "cascade" });
+ResultsTest.belongsTo(User);
 
 module.exports = {
   User,
@@ -73,4 +115,9 @@ module.exports = {
   Test,
   QuestionTest,
   QuestionAnswer,
+  MPITheory,
+  OpenMPTheory,
+  Theory,
+  ResultsTest,
+  OnelineAnswer,
 };

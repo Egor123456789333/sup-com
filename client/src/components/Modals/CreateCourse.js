@@ -5,7 +5,7 @@ import { Context } from "../..";
 const CreateCourse = ({ show, onHide }) => {
   const { course } = useContext(Context);
   course.types.map((type) => {
-    console.log(type.name);
+    //console.log(type.name);
   });
   return (
     <Modal

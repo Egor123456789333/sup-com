@@ -6,6 +6,7 @@ module.exports = function (role) {
       next();
     }
     try {
+      //console.log(req.headers);
       const token = req.headers.authorization.split(" ")[1]; //Bearer dgjndfkgbfj
       if (!token) {
         return res.status(401).json({ message: "Не авторизованcc" });
@@ -17,7 +18,7 @@ module.exports = function (role) {
       req.user = decoded;
       next();
     } catch (e) {
-      res.status(401).json({ message: "Не авторизованCCC" });
+      res.status(401).json({ message: e.message });
     }
   };
 };
