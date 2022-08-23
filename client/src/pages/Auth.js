@@ -12,18 +12,18 @@ const Auth = observer(() => {
   const location = useLocation();
   const history = useHistory();
   const isLogin = location.pathname === LOGIN_ROUTE;
-  //console.log(isLogin);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
 
   const click = async () => {
     try {
       let data;
       if (isLogin) {
         data = await login(email, password);
-        console.log(data);
       } else {
-        data = await registration(email, password);
+        data = await registration(email, password, name, surname);
       }
       user.setUser(data);
       user.setIsAuth(true);
@@ -42,6 +42,24 @@ const Auth = observer(() => {
         <h2 className="m-auto">{isLogin ? "Авторизация" : "Регистрация"}</h2>
 
         <Form className="d-flex flex-column">
+          {isLogin ? (
+            <div></div>
+          ) : (
+            <div>
+              <Form.Control
+                className="mt-3"
+                placeholder="Введите имя"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              ></Form.Control>
+              <Form.Control
+                className="mt-3"
+                placeholder="Введите фамилию"
+                value={surname}
+                onChange={(e) => setSurname(e.target.value)}
+              ></Form.Control>
+            </div>
+          )}
           <Form.Control
             className="mt-3"
             placeholder="Введите email..."
@@ -49,27 +67,26 @@ const Auth = observer(() => {
             onChange={(e) => setEmail(e.target.value)}
           ></Form.Control>
           <Form.Control
-            className="mt-3"
+            className="mt-3 mb-4"
             placeholder="Введите пароль..."
             value={password}
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           ></Form.Control>
-
+          <Button variant={"outline-success"} onClick={click}>
+            {isLogin ? "Войти" : "Регистрация"}
+          </Button>
           <Row className="d-flex justify-content-between mt-3 pl-3 pr-3">
             {isLogin ? (
               <div>
-                Нет аккаунта?
-                <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйся!</NavLink>
+                Нет аккаунта?{" "}
+                <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйтесь!</NavLink>
               </div>
             ) : (
               <div>
                 Есть аккаунт? <NavLink to={LOGIN_ROUTE}>Войдите!</NavLink>
               </div>
             )}
-            <Button variant={"outline-success"} onClick={click}>
-              {isLogin ? "Войти" : "Регистрация"}
-            </Button>
           </Row>
         </Form>
       </Card>

@@ -81,6 +81,10 @@ class AnswerController {
               model: QuestionAnswer,
               attributes: { exclude: ["rigth"] },
             },
+            {
+              model: OnelineAnswer,
+              attributes: { exclude: ["answerText"] },
+            },
           ],
         },
       ],

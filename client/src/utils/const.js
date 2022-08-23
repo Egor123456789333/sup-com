@@ -18,3 +18,4 @@ export const UPDATE_COURSE = "/update_course";
 export const ADD_THEORY = "/add_theory";
 export const THEORY_LIST = "/theory_list";
 export const UPDATE_THEORY = "/update_theory";
+export const PERSONAL_ACCOUNT = "/pesonal_account";

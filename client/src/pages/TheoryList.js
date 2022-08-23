@@ -45,22 +45,22 @@ const TheoryList = observer(() => {
         <Col>
           <h1>Выберите главу для редактирования</h1>
           <div className="list-group">
-            {theory.chapters.map((oneCourse, i) => (
+            {theory.chapters.map((oneTheory, i) => (
               <a
-                key={oneCourse.id}
-                className="list-group-item list-group-item-action "
+                key={oneTheory.id}
+                className=" list-group-item list-group-item-action  "
                 aria-current="true"
                 onClick={() => {
-                  history.push(UPDATE_THEORY + "/" + oneCourse.id);
+                  history.push(UPDATE_THEORY + "/" + oneTheory.id);
                 }}
               >
-                <div className="d-flex w-100 justify-content-between">
-                  <h5 className="mb-1">{oneCourse.name}</h5>
+                <div className="d-flex w-100 justify-content-between pb-3">
+                  <h5 className="mb-1 ">{oneTheory.name}</h5>
                   <Button
                     variant="outline-danger"
                     onClick={(e) => {
                       e.stopPropagation();
-                      deleteTheory(oneCourse.id).then(() => {
+                      deleteTheory(oneTheory.id).then(() => {
                         let newCourses = theory.chapters;
                         newCourses.splice(i, 1);
                         theory.setChapters(newCourses);
@@ -70,8 +70,7 @@ const TheoryList = observer(() => {
                     Удалить
                   </Button>
                 </div>
-                <p className="mb-1">Мб неинтересно</p>
-                <small>а тут хызы чо</small>
+                <p className="mb-1">Тема: {oneTheory.type}</p>
               </a>
             ))}
           </div>

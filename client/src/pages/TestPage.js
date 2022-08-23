@@ -14,14 +14,20 @@ const TestPage = observer(() => {
 
   const history = useHistory();
   let curNum = window.location.pathname.split("/");
-  //console.log(curNum);
+
   let courseId = curNum[2];
-  //console.log(courseId);
+
   const { test, user } = useContext(Context);
 
   useEffect(() => {
     test.setOneTest([]);
-    fetchOneTest(courseId).then((data) => test.setOneTest(data));
+    fetchOneTest(courseId).then((data) => {
+      let newData = data;
+      newData.question_tests.sort(function (a, b) {
+        return a.position - b.position;
+      });
+      test.setOneTest(newData);
+    });
   }, []);
 
   if (typeof test.oneTest.question_tests == "undefined") {
@@ -44,7 +50,6 @@ const TestPage = observer(() => {
       newAnswer.push([answerId, questionId, questionType]);
     }
 
-    console.log(newAnswer);
     if (newAnswer.length == test.oneTest.question_tests.length) {
       setDisabledButton(false);
     } else {
@@ -76,7 +81,6 @@ const TestPage = observer(() => {
                           id={answer.id}
                           onChange={() => {
                             onAnswer(answer.id, question.id, question.type);
-                            //console.log(answer.id, question.id);
                           }}
                         />
                         <label className="form-check-label" htmlFor={answer.id}>
@@ -88,15 +92,12 @@ const TestPage = observer(() => {
                 </div>
               );
             } else if (question.type == "oneline") {
-              console.log(question);
               return (
                 <div className="card p-3 mb-3" key={question.id}>
                   <h4>{question.questionText}</h4>
                   <Form htmlFor={question.id} className="w-100">
                     <Form.Control
                       onChange={(e) => {
-                        console.log(e.target.value);
-
                         onAnswer(e.target.value, question.id, question.type);
                       }}
                       placeholder={"Введите текст ответа"}
@@ -110,7 +111,6 @@ const TestPage = observer(() => {
             variant={"outline-success"}
             onClick={() => {
               onComleted();
-              //console.log(answer);
             }}
             disabled={disabledButton}
           >

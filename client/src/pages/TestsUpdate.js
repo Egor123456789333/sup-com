@@ -50,7 +50,7 @@ const TestsUpdate = observer(() => {
                   </Button>
                 </div>
                 <p className="mb-1">Мб неинтересно</p>
-                <small>а тут хызы чо</small>
+                <small>SUPCOM</small>
               </a>
             ))}
           </div>

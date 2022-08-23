@@ -9,26 +9,14 @@ import {
   DropdownButton,
   Dropdown,
 } from "react-bootstrap";
-import CreateCourse from "../components/Modals/CreateCourse";
-import CreateTest from "../components/Modals/CreateTest";
-import CreateTheory from "../components/Modals/CreateTheory";
+import { Trash } from "react-bootstrap-icons";
 import { ADD_TEST } from "../utils/const";
 import { useHistory } from "react-router-dom";
 
-{
-  /* <AddQuestion
-              question={question}
-              
-              setTest={setTest}
-            /> */
-}
-
 const AddQuestion = ({ test, setTest }) => {
-  //console.log("'''''", test);
   return (
     <div>
       {test.questionTests.map((question, idQuestion) => {
-        //console.log(idQuestion);
         return (
           <div className="card p-3 mt-3" key={idQuestion}>
             <Row>
@@ -36,25 +24,12 @@ const AddQuestion = ({ test, setTest }) => {
                 <Form>
                   <Form.Group as={Row}>
                     <Form.Label column>{idQuestion + 1}</Form.Label>
-                    <Col sm="11">
-                      <Form.Control
-                        value={question.questionText}
-                        onChange={(e) => {
-                          let newText = test.questionTests;
-                          newText[idQuestion].questionText = e.target.value;
-                          setTest((prevState) => ({
-                            ...prevState,
-                            questionTests: newText,
-                          }));
-                        }}
-                        placeholder={"Введите текст вопроса"}
-                      />
-                    </Col>
                   </Form.Group>
                 </Form>
               </Col>
+
               <Col xs={2}>
-                <InputGroup className="mb-3">
+                <InputGroup className="mb-3 w-100">
                   <DropdownButton
                     variant="outline-primary"
                     title={question.typeRu}
@@ -102,6 +77,38 @@ const AddQuestion = ({ test, setTest }) => {
                 <Button
                   className="w-100"
                   onClick={() => {
+                    let questionDel = test.questionTests;
+                    questionDel.splice(idQuestion, 1);
+                    setTest((prevState) => ({
+                      ...prevState,
+                      questionTests: questionDel,
+                    }));
+                  }}
+                  variant={"outline-danger"}
+                >
+                  Удалить вопрос
+                </Button>
+              </Col>
+            </Row>
+            <Row className="mt-2">
+              <Col sm="10">
+                <Form.Control
+                  value={question.questionText}
+                  onChange={(e) => {
+                    let newText = test.questionTests;
+                    newText[idQuestion].questionText = e.target.value;
+                    setTest((prevState) => ({
+                      ...prevState,
+                      questionTests: newText,
+                    }));
+                  }}
+                  placeholder={"Введите текст вопроса"}
+                />
+              </Col>
+              <Col>
+                <Button
+                  className="w-100"
+                  onClick={() => {
                     let answer = test.questionTests;
                     answer[idQuestion].questionAnswers.push({
                       text: "",
@@ -118,32 +125,13 @@ const AddQuestion = ({ test, setTest }) => {
                   Добавить ответ
                 </Button>
               </Col>
-              <Col xs={2}>
-                <Button
-                  className="w-100"
-                  onClick={() => {
-                    let questionDel = test.questionTests;
-                    ////console.log(id, "  ", answer);
-                    questionDel.splice(idQuestion, 1);
-                    ////console.log(question);
-                    setTest((prevState) => ({
-                      ...prevState,
-                      questionTests: questionDel,
-                    }));
-                  }}
-                  variant={"outline-danger"}
-                >
-                  Удалить вопрос
-                </Button>
-              </Col>
             </Row>
-
             {question.questionAnswers.map((answer, id) => {
               if (question.type == "oneAnswer") {
                 return (
                   <Row className="mt-3" key={id}>
                     <Col
-                      xs={8}
+                      xs={11}
                       className="form-check d-flex align-items-center justify-content-between"
                     >
                       <input
@@ -157,7 +145,6 @@ const AddQuestion = ({ test, setTest }) => {
 
                           newRight[idQuestion].questionAnswers.map(
                             (answer, rightId) => {
-                              //console.log("БУБУБУ");
                               if (rightId == id) {
                                 answer.rigth = true;
                               } else {
@@ -190,16 +177,16 @@ const AddQuestion = ({ test, setTest }) => {
                       </Form>
                     </Col>
 
-                    <Col xs={4}>
+                    <Col xs={1}>
                       <Button
                         className="w-100"
                         onClick={() => {
                           let answerDel = JSON.parse(
                             JSON.stringify(test.questionTests)
                           );
-                          //console.log(id, "  ", answer);
+
                           answerDel[idQuestion].questionAnswers.splice(id, 1);
-                          //console.log(question);
+
                           setTest((prevState) => ({
                             ...prevState,
                             questionTests: answerDel,
@@ -207,7 +194,7 @@ const AddQuestion = ({ test, setTest }) => {
                         }}
                         variant={"outline-danger"}
                       >
-                        Удалить ответ
+                        <Trash></Trash>
                       </Button>
                     </Col>
                   </Row>

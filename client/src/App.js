@@ -14,10 +14,12 @@ const App = observer(() => {
 
   useEffect(() => {
     fetchTheory().then((data) => {
+      console.log(data);
       theory.setChapters(data);
     });
     check()
       .then((data) => {
+        console.log(data);
         user.setUser(data);
         user.setIsAuth(true);
       })

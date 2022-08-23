@@ -12,10 +12,8 @@ const TypeBar = observer(() => {
   const [mpiTheory, setMpiTheory] = useState([]);
   const [openMPTheory, setOpenMPTheory] = useState([]);
   const [wasFetch, setWasFetch] = useState(0);
-  //console.log(courseId);
-  const { theory } = useContext(Context);
 
-  //console.log(curNum);
+  const { theory } = useContext(Context);
 
   useEffect(() => {
     let curNum = window.location.pathname.split("/");
@@ -26,6 +24,7 @@ const TypeBar = observer(() => {
     }
     let mpi = [];
     let openMp = [];
+
     theory.chapters.map((chapter) => {
       if (chapter.type == "MPI") {
         mpi.push(chapter);
@@ -33,26 +32,31 @@ const TypeBar = observer(() => {
         openMp.push(chapter);
       }
     });
+
     setMpiTheory(mpi);
     setOpenMPTheory(openMp);
-    console.log(theory);
-  }, []);
+  }, [theory.chapters]);
 
   useEffect(() => {
     setWasFetch(1);
   }, [mpiTheory, openMPTheory]);
 
-  // useEffect(() => {
-  //   console.log(mpiTheory);
-  // }, [mpiTheory]);
-
-  //console.log("dsfd");
   if (!wasFetch) {
     return <div></div>;
   }
   return (
     <ListGroup>
-      <ListGroup.Item>MPI</ListGroup.Item>
+      <ListGroup.Item>
+        <div
+          style={{
+            textTransform: "uppercase",
+
+            fontWeight: "bold",
+          }}
+        >
+          MPI
+        </div>
+      </ListGroup.Item>
       {mpiTheory.map((chapter) => (
         <ListGroup.Item
           style={{ cursor: "pointer" }}
@@ -68,7 +72,15 @@ const TypeBar = observer(() => {
           </div>
         </ListGroup.Item>
       ))}
-      <ListGroup.Item>OpenMP</ListGroup.Item>
+      <ListGroup.Item>
+        <div
+          style={{
+            fontWeight: "bold",
+          }}
+        >
+          OpenMP
+        </div>
+      </ListGroup.Item>
       {openMPTheory.map((chapter) => (
         <ListGroup.Item
           style={{ cursor: "pointer" }}

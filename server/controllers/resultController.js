@@ -15,6 +15,7 @@ class ResultsController {
     const {} = req.body;
     let results;
     results = await ResultsTest.findAll();
+    console.log(res.json(results));
     return res.json(results);
   }
 }

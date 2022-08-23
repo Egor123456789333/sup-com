@@ -20,9 +20,6 @@ import { observer } from "mobx-react-lite";
 const Admin = observer(() => {
   const history = useHistory();
   const { user } = useContext(Context);
-  const [courseVisible, setCourseVisible] = useState(false);
-  const [testVisible, setTestVisible] = useState(false);
-  const [theoryVisible, setTheoryVisible] = useState(false);
 
   return (
     <Container className="d-flex flex-column ">

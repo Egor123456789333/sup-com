@@ -10,6 +10,7 @@ import {
   DropdownButton,
   Dropdown,
 } from "react-bootstrap";
+import { Trash } from "react-bootstrap-icons";
 import CreateCourse from "../components/Modals/CreateCourse";
 import CreateTest from "../components/Modals/CreateTest";
 import CreateTheory from "../components/Modals/CreateTheory";
@@ -26,11 +27,10 @@ import { useHistory } from "react-router-dom";
 
 const AddUpdateQuestion = ({ oneTest, setOneTest }) => {
   const { test } = useContext(Context);
-  console.log("'''''", oneTest);
+  //console.log("'''''", oneTest);
   return (
     <div>
       {oneTest.question_tests.map((question, idQuestion) => {
-        //console.log(idQuestion);
         return (
           <div className="card p-3 mt-3" key={idQuestion}>
             <Row>
@@ -38,20 +38,6 @@ const AddUpdateQuestion = ({ oneTest, setOneTest }) => {
                 <Form>
                   <Form.Group as={Row}>
                     <Form.Label column>{question.position}</Form.Label>
-                    <Col sm="11">
-                      <Form.Control
-                        value={question.questionText}
-                        onChange={(e) => {
-                          let newText = oneTest.question_tests;
-                          newText[idQuestion].questionText = e.target.value;
-                          setOneTest((prevState) => ({
-                            ...prevState,
-                            question_tests: newText,
-                          }));
-                        }}
-                        placeholder={"Введите текст вопроса"}
-                      />
-                    </Col>
                   </Form.Group>
                 </Form>
               </Col>
@@ -66,16 +52,29 @@ const AddUpdateQuestion = ({ oneTest, setOneTest }) => {
                       onClick={() => {
                         let question = oneTest.question_tests;
                         console.log(oneTest);
-                        question[idQuestion].type = "oneAnswer";
-                        question[idQuestion].typeRu = "Один ответ";
-                        question[idQuestion].disabled = false;
+                        let delArr = oneTest.deleteQuestion;
+                        if (question[idQuestion].type != "oneAnswer") {
+                          if (
+                            question[idQuestion].id != 0 &&
+                            typeof question[idQuestion].id != undefined
+                          ) {
+                            console.log("может не надо?");
+                            delArr.push(question[idQuestion].id);
+                            question[idQuestion].id = 0;
+                          }
+                          question[idQuestion].type = "oneAnswer";
+                          question[idQuestion].typeRu = "Один ответ";
+                          question[idQuestion].disabled = false;
 
-                        question[idQuestion].questionAnswers = [
-                          { text: "", rigth: false },
-                        ];
+                          question[idQuestion].question_answers = [
+                            { text: "", rigth: false },
+                          ];
+                        }
+
                         setOneTest((prevState) => ({
                           ...prevState,
                           question_tests: question,
+                          deleteQuestion: delArr,
                         }));
                       }}
                     >
@@ -85,15 +84,31 @@ const AddUpdateQuestion = ({ oneTest, setOneTest }) => {
                       onClick={() => {
                         let question = oneTest.question_tests;
                         console.log(question);
-                        question[idQuestion].type = "oneline";
-                        question[idQuestion].typeRu = "Ввод ответа";
-                        question[idQuestion].disabled = true;
-                        question[idQuestion].questionAnswers = [
-                          { answerText: "" },
-                        ];
+                        let delArr = oneTest.deleteQuestion;
+                        if (question[idQuestion].type != "oneline") {
+                          if (
+                            question[idQuestion].id != 0 &&
+                            typeof question[idQuestion].id != undefined
+                          ) {
+                            console.log("может не надо?");
+                            delArr.push(question[idQuestion].id);
+                            question[idQuestion].id = 0;
+                          }
+
+                          console.log(idQuestion, "  ", question);
+                          question[idQuestion].type = "oneline";
+                          question[idQuestion].typeRu = "Ввод ответа";
+                          question[idQuestion].disabled = true;
+                          question[idQuestion].one_lines[0].answerText = "";
+                          question[idQuestion].question_answers = [
+                            { text: "", rigth: "false" },
+                          ];
+                        }
+
                         setOneTest((prevState) => ({
                           ...prevState,
                           question_tests: question,
+                          deleteQuestion: delArr,
                         }));
                       }}
                     >
@@ -102,7 +117,48 @@ const AddUpdateQuestion = ({ oneTest, setOneTest }) => {
                   </DropdownButton>
                 </InputGroup>
               </Col>
+
               <Col xs={2}>
+                <Button
+                  className="w-100"
+                  onClick={() => {
+                    let questionDel = oneTest.question_tests;
+                    let delArr = oneTest.deleteQuestion;
+                    ////console.log(id, "  ", answer);
+                    delArr.push(questionDel[idQuestion].id);
+                    questionDel.splice(idQuestion, 1);
+                    questionDel.map((question, i) => {
+                      question.position = i + 1;
+                    });
+                    ////console.log(question);
+                    setOneTest((prevState) => ({
+                      ...prevState,
+                      question_tests: questionDel,
+                      deleteQuestion: delArr,
+                    }));
+                  }}
+                  variant={"outline-danger"}
+                >
+                  Удалить вопрос
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm="10">
+                <Form.Control
+                  value={question.questionText}
+                  onChange={(e) => {
+                    let newText = oneTest.question_tests;
+                    newText[idQuestion].questionText = e.target.value;
+                    setOneTest((prevState) => ({
+                      ...prevState,
+                      question_tests: newText,
+                    }));
+                  }}
+                  placeholder={"Введите текст вопроса"}
+                />
+              </Col>
+              <Col>
                 <Button
                   className="w-100"
                   onClick={() => {
@@ -122,107 +178,111 @@ const AddUpdateQuestion = ({ oneTest, setOneTest }) => {
                   Добавить ответ
                 </Button>
               </Col>
-              <Col xs={2}>
-                <Button
-                  className="w-100"
-                  // onClick={() => {
-                  //   let questionDel = oneTest.question_tests;
-                  //   let delArr = oneTest.deleteQuestion;
-                  //   ////console.log(id, "  ", answer);
-                  //   delArr.push(questionDel[idQuestion].id);
-                  //   questionDel.splice(idQuestion, 1);
-
-                  //   ////console.log(question);
-                  //   setOneTest((prevState) => ({
-                  //     ...prevState,
-                  //     question_tests: questionDel,
-                  //     deleteQuestion: delArr,
-                  //   }));
-                  // }}
-                  variant={"outline-danger"}
-                >
-                  Удалить вопрос
-                </Button>
-              </Col>
             </Row>
-            {question.one_lines.map((answer, id) => {})}
-            {/* {question.question_answers.map((answer, id) => {
-              return (
-                <Row className="mt-3" key={id}>
-                  <Col
-                    xs={8}
-                    className="form-check d-flex align-items-center justify-content-between"
-                  >
-                    <input
-                      // checked={answer.rigth}
-                      className="form-check-input"
-                      type="radio"
-                      //name={`forQuestion+${idQuestion}`}
-                      //id={2}
-                      // onChange={() => {
-                      //   let newRight = oneTest.question_tests;
-
-                      //   newRight[idQuestion].question_answers.map(
-                      //     (answer, rightId) => {
-                      //       //console.log("БУБУБУ");
-                      //       if (rightId == id) {
-                      //         answer.rigth = true;
-                      //       } else {
-                      //         answer.rigth = false;
-                      //       }
-                      //     }
-                      //   );
-                      //   console.log(newRight);
-                      //   setOneTest((prevState) => ({
-                      //     ...prevState,
-                      //     question_tests: newRight,
-                      //   }));
-                      // }}
-                    />
-                    <Form htmlFor={2} className="w-100">
-                      <Form.Control
-                        //value={answer.text}
-                        // onChange={(e) => {
-                        //   let newText = oneTest.question_tests;
-                        //   newText[idQuestion].question_answers[id].text =
-                        //     e.target.value;
-                        //   setOneTest((prevState) => ({
-                        //     ...prevState,
-                        //     question_tests: newText,
-                        //   }));
-                        // }}
-                        placeholder={"Введите текст ответа"}
-                      />
-                    </Form>
-                  </Col>
-
-                  <Col xs={4}>
-                    <Button
-                      className="w-100"
-                      // onClick={() => {
-                      //   let answerDel = oneTest.question_tests;
-                      //   let delArr = oneTest.deleteAnswer;
-                      //   console.log(oneTest);
-                      //   delArr.push(
-                      //     answerDel[idQuestion].question_answers[id].id
-                      //   );
-                      //   answerDel[idQuestion].question_answers.splice(id, 1);
-
-                      //   //console.log(question);
-                      //   setOneTest((prevState) => ({
-                      //     ...prevState,
-                      //     question_tests: answerDel,
-                      //     deleteAnswer: delArr,
-                      //   }));
-                      // }}
-                      variant={"outline-danger"}
+            {question.question_answers.map((answer, id) => {
+              console.log(question.type);
+              if (question.type == "oneAnswer") {
+                return (
+                  <Row className="mt-3" key={id}>
+                    <Col
+                      xs={11}
+                      className="form-check d-flex align-items-center justify-content-between"
                     >
-                      Удалить ответ
-                    </Button>
-                  </Col>
-                </Row>
-              );
-            })} */}
+                      <input
+                        checked={answer.rigth}
+                        className="form-check-input"
+                        type="radio"
+                        name={`forQuestion+${idQuestion}`}
+                        id={answer.id}
+                        onChange={() => {
+                          let newRight = oneTest.question_tests;
+
+                          newRight[idQuestion].question_answers.map(
+                            (answer, rightId) => {
+                              //console.log("БУБУБУ");
+                              if (rightId == id) {
+                                answer.rigth = true;
+                              } else {
+                                answer.rigth = false;
+                              }
+                            }
+                          );
+                          console.log(newRight);
+                          setOneTest((prevState) => ({
+                            ...prevState,
+                            question_tests: newRight,
+                          }));
+                        }}
+                      />
+                      <Form htmlFor={answer.id} className="w-100">
+                        <Form.Control
+                          value={answer.text}
+                          onChange={(e) => {
+                            let newText = oneTest.question_tests;
+                            newText[idQuestion].question_answers[id].text =
+                              e.target.value;
+                            setOneTest((prevState) => ({
+                              ...prevState,
+                              question_tests: newText,
+                            }));
+                          }}
+                          placeholder={"Введите текст ответа"}
+                        />
+                      </Form>
+                    </Col>
+
+                    <Col xs={1}>
+                      <Button
+                        className="w-100"
+                        onClick={() => {
+                          let answerDel = oneTest.question_tests;
+                          let delArr = oneTest.deleteAnswer;
+                          console.log(oneTest);
+                          delArr.push(
+                            answerDel[idQuestion].question_answers[id].id
+                          );
+                          answerDel[idQuestion].question_answers.splice(id, 1);
+
+                          //console.log(question);
+                          setOneTest((prevState) => ({
+                            ...prevState,
+                            question_tests: answerDel,
+                            deleteAnswer: delArr,
+                          }));
+                        }}
+                        variant={"outline-danger"}
+                      >
+                        <Trash></Trash>
+                      </Button>
+                    </Col>
+                  </Row>
+                );
+              } else if (question.type == "oneline") {
+                return (
+                  <Row className="mt-3" key={id}>
+                    <Col className="form-check d-flex align-items-center justify-content-between">
+                      <Form htmlFor={id} className="w-100">
+                        <Form.Control
+                          value={question.one_lines[0].answerText}
+                          onChange={(e) => {
+                            let newText = JSON.parse(
+                              JSON.stringify(oneTest.question_tests)
+                            );
+                            newText[idQuestion].one_lines[0].answerText =
+                              e.target.value;
+                            setOneTest((prevState) => ({
+                              ...prevState,
+                              question_tests: newText,
+                            }));
+                          }}
+                          placeholder={"Введите текст ответа"}
+                        />
+                      </Form>
+                    </Col>
+                  </Row>
+                );
+              }
+            })}
           </div>
         );
       })}

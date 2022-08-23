@@ -100,7 +100,6 @@ const AddTheory = () => {
               variant="outline-primary"
               title={theory.type}
               id="input-group-dropdown-1"
-              value="Говно"
             >
               <Dropdown.Item
                 onClick={() =>
@@ -116,7 +115,7 @@ const AddTheory = () => {
                 onClick={() =>
                   setTheory((prevState) => ({
                     ...prevState,
-                    type: "openMP",
+                    type: "OpenMP",
                   }))
                 }
               >

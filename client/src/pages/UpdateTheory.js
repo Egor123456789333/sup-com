@@ -138,7 +138,7 @@ const UpdateTheory = () => {
                 onClick={() =>
                   setTheory((prevState) => ({
                     ...prevState,
-                    type: "openMP",
+                    type: "OpenMP",
                   }))
                 }
               >

@@ -6,12 +6,15 @@ const User = sequelize.define("user", {
   email: { type: DataTypes.STRING, unique: true },
   password: { type: DataTypes.STRING, unique: false },
   role: { type: DataTypes.STRING, unique: false, defaultValue: "USER" },
+  name: { type: DataTypes.STRING },
+  surname: { type: DataTypes.STRING },
 });
 
 const Test = sequelize.define("test", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  chapter: { type: DataTypes.INTEGER, unique: true },
+  chapter: { type: DataTypes.INTEGER, unique: false },
   chapterName: { type: DataTypes.TEXT, unique: true },
+  theoryType: { type: DataTypes.STRING, allowNull: false },
 });
 
 const QuestionTest = sequelize.define("question_test", {
@@ -58,38 +61,35 @@ const Author = sequelize.define("author", {
 const Theory = sequelize.define("theory", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   chapterNum: { type: DataTypes.INTEGER },
-  name: { type: DataTypes.STRING, unique: true, allowNull: false },
+  name: { type: DataTypes.STRING, unique: false, allowNull: false },
   text: { type: DataTypes.TEXT, allowNull: false },
   type: { type: DataTypes.STRING, allowNull: false },
 });
 
-const MPITheory = sequelize.define("mpi", {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.STRING, unique: true, allowNull: false },
-  text: { type: DataTypes.TEXT, unique: true, allowNull: false },
-});
-
-const OpenMPTheory = sequelize.define("openMp", {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.STRING, unique: true, allowNull: false },
-  text: { type: DataTypes.TEXT, unique: true, allowNull: false },
-});
-
 const ResultsTest = sequelize.define("result", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  userId: { type: DataTypes.INTEGER },
+
   testId: { type: DataTypes.INTEGER },
   rigthAnswers: { type: DataTypes.REAL },
 });
 
-User.hasOne(Basket);
-Basket.belongsTo(User);
+User.hasOne(Basket, { onDelete: "cascade" });
+Basket.belongsTo(User, { onDelete: "cascade" });
 
-Basket.hasMany(BasketCourse);
-BasketCourse.belongsTo(Basket);
+Basket.hasMany(BasketCourse, { onDelete: "cascade" });
+BasketCourse.belongsTo(Basket, { onDelete: "cascade" });
 
-Course.hasMany(BasketCourse);
-BasketCourse.belongsTo(Course);
+Course.hasMany(BasketCourse, { onDelete: "cascade" });
+BasketCourse.belongsTo(Course, { onDelete: "cascade" });
+
+Basket.belongsToMany(Course, { onDelete: "cascade", through: "BasketCourse" });
+Course.belongsToMany(Basket, { onDelete: "cascade", through: "BasketCourse" });
+
+Course.hasMany(BasketCourse, { onDelete: "cascade" });
+BasketCourse.belongsTo(Course, { onDelete: "cascade" });
+
+User.hasOne(BasketCourse, { onDelete: "cascade" });
+BasketCourse.belongsTo(User, { onDelete: "cascade" });
 
 Author.hasMany(Course, { as: "authorInfo" });
 Course.belongsTo(Author);
@@ -115,8 +115,6 @@ module.exports = {
   Test,
   QuestionTest,
   QuestionAnswer,
-  MPITheory,
-  OpenMPTheory,
   Theory,
   ResultsTest,
   OnelineAnswer,

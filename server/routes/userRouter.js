@@ -6,5 +6,7 @@ const router = new Router();
 router.post("/registration", userController.registration);
 router.post("/login", userController.login);
 router.get("/auth", authMeddleware, userController.check);
+router.put("/name", userController.changeName);
+router.put("/surname", userController.changeSurname);
 
 module.exports = router;

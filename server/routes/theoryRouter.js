@@ -5,7 +5,7 @@ const router = new Router();
 const CourseController = require("../controllers/courseController");
 const TheoryController = require("../controllers/theoryController");
 
-router.post("/", TheoryController.createTheory);
+router.post("/", checkRole("ADMIN"), TheoryController.createTheory);
 //router.post("/openMP", TheoryController.createOpenPM);
 
 router.get("/", TheoryController.getAll);

@@ -11,6 +11,8 @@ export default class CourseStore {
 
     this._selectedType = {};
 
+    this._basket = [];
+
     makeAutoObservable(this);
   }
   setCourses(courses) {
@@ -25,8 +27,8 @@ export default class CourseStore {
     this._types = types;
   }
 
-  setSelectedType(type) {
-    this._selectedType = type;
+  setBasket(basket) {
+    this._basket = basket;
   }
 
   get courses() {
@@ -40,5 +42,9 @@ export default class CourseStore {
   }
   get selectedType() {
     return this._selectedType;
+  }
+
+  get basket() {
+    return this._basket;
   }
 }

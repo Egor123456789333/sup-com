@@ -12,9 +12,9 @@ const CheckPage = observer(() => {
   let rigthPoint = 0;
   const history = useHistory();
   let curNum = window.location.pathname.split("/");
-  //console.log(curNum);
+
   let courseId = curNum[2];
-  //console.log(courseId);
+
   const { test } = useContext(Context);
 
   useEffect(() => {}, []);
@@ -41,7 +41,7 @@ const CheckPage = observer(() => {
           <h1>{test.oneTest.chapterName}</h1>
           {test.oneTest.question_tests.map((question) => {
             let counter = 0;
-            console.log(question.type);
+
             if (question.type == "oneAnswer") {
               return (
                 <div className="card p-3 mb-3" key={question.id}>
@@ -49,7 +49,7 @@ const CheckPage = observer(() => {
 
                   {question.question_answers.map((answer) => {
                     let colorAnswer = "";
-                    //console.log("Ответики", test.answer);
+
                     for (let i = 0; i < test.answer.length; i++) {
                       if (
                         test.answer[i][1] == question.id &&
@@ -90,7 +90,6 @@ const CheckPage = observer(() => {
                   test.answer[i][3] == true &&
                   test.answer[i][2] == "oneline"
                 ) {
-                  console.log(question);
                   return (
                     <div className="card p-3 mb-3" key={question.id}>
                       <h4>{question.questionText}</h4>
@@ -103,8 +102,8 @@ const CheckPage = observer(() => {
                           htmlFor={question.one_lines[0].id}
                         >
                           <font>
-                            Ваш ответ {test.answer[i][0]}
-                            <font color="green"> верен</font>
+                            Ваш ответ
+                            <font color="green"> {test.answer[i][0]}</font>
                           </font>
                         </label>
                       </div>
@@ -115,17 +114,16 @@ const CheckPage = observer(() => {
                   test.answer[i][3] == false &&
                   test.answer[i][2] == "oneline"
                 ) {
-                  console.log(question);
                   return (
                     <div className="card p-3 mb-3" key={question.id}>
                       <h4>{question.questionText}</h4>
-                      <div key={answer.id} className="form-check">
+                      <div key={answer.id} className="">
                         <label className="form-check-label" htmlFor={answer.id}>
                           <font>
-                            Ваш ответ {test.answer[i][0]}{" "}
-                            <font color="red">не верен </font>,
-                            <font color="green">верный ответ-</font>{" "}
-                            {test.answer[i][4]}
+                            Ваш ответ{" "}
+                            <font color="red">{test.answer[i][0]} </font>,
+                            верный ответ{" "}
+                            <font color="green"> {test.answer[i][4]}</font>{" "}
                           </font>
                         </label>
                       </div>
@@ -133,11 +131,10 @@ const CheckPage = observer(() => {
                   );
                 }
               }
-              console.log("DDDD");
             }
           })}
           <div>
-            {rigthPoint}/{test.oneTest.question_tests.length}
+            Верных ответов {rigthPoint} / {test.oneTest.question_tests.length}
           </div>
         </Col>
       </Row>

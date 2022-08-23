@@ -26,6 +26,7 @@ import {
   ADD_THEORY,
   THEORY_LIST,
   UPDATE_THEORY,
+  PERSONAL_ACCOUNT,
 } from "./utils/const";
 import Auth from "./pages/Auth";
 import CoursePage from "./pages/CoursePage";
@@ -40,6 +41,7 @@ import UpdateCourse from "./pages/UpdateCourse";
 import AddTheory from "./pages/AddTheory";
 import TheoryList from "./pages/TheoryList";
 import UpdateTheory from "./pages/UpdateTheory";
+import PersonalAccount from "./pages/PerosnalAccount";
 
 export const adminRoutes = [
   {
@@ -87,6 +89,10 @@ export const adminRoutes = [
 ];
 
 export const authRoutes = [
+  {
+    path: PERSONAL_ACCOUNT,
+    Component: PersonalAccount,
+  },
   {
     path: BASKET_ROUTE,
     Component: Basket,
